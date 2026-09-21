@@ -1,4 +1,3 @@
-
 # MCA Semester 1 Laboratory Work
 
 This repository contains my programming and practical work completed as part of the **MCA 1st Semester Laboratory Course (CAMS-1P01)** at the **Department of Computer Science, Aligarh Muslim University (AMU)**.
