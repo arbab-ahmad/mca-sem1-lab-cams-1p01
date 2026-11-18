@@ -1,0 +1,112 @@
+CREATE TABLE BRANCH (
+    branch_name VARCHAR(50) PRIMARY KEY,
+    branch_city VARCHAR(50),
+    assets REAL
+);
+CREATE TABLE ACCOUNT (
+    accno INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    balance REAL,
+    FOREIGN KEY (branch_name)
+        REFERENCES BRANCH(branch_name)
+);
+CREATE TABLE CUSTOMER (
+    customer_name VARCHAR(50) PRIMARY KEY,
+    customer_street VARCHAR(100),
+    customer_city VARCHAR(50)
+);
+CREATE TABLE DEPOSITOR (
+    customer_name VARCHAR(50),
+    accno INT,
+    PRIMARY KEY (customer_name, accno),
+    FOREIGN KEY (customer_name)
+        REFERENCES CUSTOMER(customer_name),
+    FOREIGN KEY (accno)
+        REFERENCES ACCOUNT(accno)
+);
+CREATE TABLE LOAN (
+    loan_number INT PRIMARY KEY,
+    branch_name VARCHAR(50),
+    amount REAL,
+    FOREIGN KEY (branch_name)
+        REFERENCES BRANCH(branch_name)
+);
+
+CREATE TABLE BORROWER (
+    customer_name VARCHAR(50),
+    loan_number INT,
+    PRIMARY KEY (customer_name, loan_number),
+    FOREIGN KEY (customer_name)
+        REFERENCES CUSTOMER(customer_name),
+    FOREIGN KEY (loan_number)
+        REFERENCES LOAN(loan_number)
+);
+INSERT INTO BRANCH VALUES ('Main Branch', 'Delhi', 5000000);
+
+INSERT INTO BRANCH VALUES ('Connaught Branch', 'Delhi', 3000000);
+
+INSERT INTO BRANCH VALUES ('Rohini Branch', 'Delhi', 2500000);
+
+INSERT INTO BRANCH VALUES ('Mumbai Branch', 'Mumbai', 4000000);
+
+INSERT INTO BRANCH VALUES ('Pune Branch', 'Pune', 2000000);
+
+INSERT INTO CUSTOMER VALUES ('Asha', 'MG Road', 'Delhi');
+
+INSERT INTO CUSTOMER VALUES ('Rahul', 'Park Street', 'Kolkata');
+
+INSERT INTO CUSTOMER VALUES ('Priya', 'Civil Lines', 'Delhi');
+
+INSERT INTO CUSTOMER VALUES ('Amit', 'FC Road', 'Pune');
+
+INSERT INTO CUSTOMER VALUES ('Neha', 'Marine Drive', 'Mumbai');
+
+INSERT INTO ACCOUNT VALUES (101, 'Main Branch', 50000);
+
+INSERT INTO ACCOUNT VALUES (102, 'Main Branch', 75000);
+
+INSERT INTO ACCOUNT VALUES (103, 'Connaught Branch', 60000);
+
+INSERT INTO ACCOUNT VALUES (104, 'Rohini Branch', 45000);
+
+INSERT INTO ACCOUNT VALUES (105, 'Mumbai Branch', 90000);
+
+
+INSERT INTO DEPOSITOR VALUES ('Asha', 101);
+
+INSERT INTO DEPOSITOR VALUES ('Asha', 102);
+
+INSERT INTO DEPOSITOR VALUES ('Asha', 103);
+
+INSERT INTO DEPOSITOR VALUES ('Asha', 104);
+
+INSERT INTO DEPOSITOR VALUES ('Rahul', 105);
+
+INSERT INTO LOAN VALUES (201, 'Main Branch', 100000);
+
+INSERT INTO LOAN VALUES (202, 'Connaught Branch', 150000);
+
+INSERT INTO LOAN VALUES (203, 'Rohini Branch', 200000);
+
+INSERT INTO LOAN VALUES (204, 'Mumbai Branch', 250000);
+
+INSERT INTO LOAN VALUES (205, 'Pune Branch', 120000);
+
+INSERT INTO BORROWER VALUES ('Asha', 201);
+
+INSERT INTO BORROWER VALUES ('Rahul', 202);
+
+INSERT INTO BORROWER VALUES ('Priya', 203);
+
+INSERT INTO BORROWER VALUES ('Amit', 204);
+
+INSERT INTO BORROWER VALUES ('Neha', 205);
+
+SELECT D.customer_name
+FROM DEPOSITOR D
+JOIN ACCOUNT A
+ON D.accno = A.accno
+WHERE A.branch_name = 'Main Branch'
+GROUP BY D.customer_name
+HAVING COUNT(D.accno) >= 2;
+
